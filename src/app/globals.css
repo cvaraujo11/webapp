@@ -1,26 +1,149 @@
 @import "tailwindcss";
 
+/* Variáveis CSS para a paleta de cores (tons terrosos/verdes) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Paleta Principal - Tons Verdes/Terrosos com Foco em Contraste e Acessibilidade */
+  --color-primary: #4CAF50;       /* Verde Principal (Material Design Green 500) - Vibrante e acessível */
+  --color-primary-dark: #388E3C;  /* Verde Escuro (Material Design Green 700) - Para hover/estados ativos */
+  --color-secondary: #8BC34A;     /* Verde Claro (Material Design Light Green 500) - Complementar */
+  --color-accent: #FFC107;        /* Âmbar (Material Design Amber 500) - Para destaques */
+  --color-background: #f8f9fa;    /* Fundo Principal (Cinza muito claro/Off-white) - Limpo e suave */
+  --color-surface: #ffffff;       /* Fundo de Superfícies (Cards, Modais) - Branco puro */
+  --color-foreground: #212529;    /* Texto Principal (Bootstrap Gray 900) - Alto contraste */
+  --color-text-light: #495057;    /* Texto Secundário (Bootstrap Gray 700) - Mais suave */
+  --color-border: #dee2e6;        /* Bordas (Bootstrap Gray 300) - Sutis */
+  --color-error: #dc3545;         /* Vermelho para erros (Bootstrap Danger) */
+  --color-success: #28a745;       /* Verde para sucesso (Bootstrap Success) */
+
+  /* Tipografia Base */
+  --font-family-sans: 'Inter', sans-serif; /* Definindo Inter como padrão */
+  --font-size-base: 1rem; /* 16px */
+  --line-height-base: 1.7; /* Aumentado para melhor legibilidade */
+
+  /* Hierarquia de Títulos */
+  --font-size-h1: 2.5rem;  /* 40px */
+  --font-size-h2: 2rem;    /* 32px */
+  --font-size-h3: 1.75rem; /* 28px */
+  --font-size-h4: 1.5rem;  /* 24px */
+  --font-size-h5: 1.25rem; /* 20px */
+  --font-size-h6: 1rem;    /* 16px */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* Modo Escuro (Ajustar cores para contraste adequado no escuro) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-primary: #66bb6a;       /* Verde mais claro para modo escuro */
+    --color-primary-dark: #4caf50;
+    --color-secondary: #aed581;
+    --color-accent: #ffca28;
+    --color-background: #121212;    /* Fundo escuro padrão (Material Design) */
+    --color-surface: #1e1e1e;       /* Superfícies um pouco mais claras */
+    --color-foreground: #e0e0e0;    /* Texto claro */
+    --color-text-light: #bdbdbd;    /* Texto secundário claro */
+    --color-border: #424242;        /* Bordas mais escuras */
+    --color-error: #ef5350;
+    --color-success: #66bb6a;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  -webkit-font-smoothing: antialiased; /* Melhora renderização da fonte */
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Estilos de Títulos para Hierarquia */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-foreground); /* Cor padrão para títulos */
+  font-weight: 600; /* Semi-bold para destaque */
+  margin-top: 2em; /* Mais espaço acima */
+  margin-bottom: 1em; /* Mais espaço abaixo */
+  line-height: 1.3; /* Ajuste para títulos */
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+h4 { font-size: var(--font-size-h4); }
+h5 { font-size: var(--font-size-h5); }
+h6 { font-size: var(--font-size-h6); }
+
+p {
+  margin-bottom: 1.25em; /* Aumentar espaço abaixo dos parágrafos */
+}
+
+ul, ol {
+  margin-bottom: 1.25em;
+  padding-left: 1.75em; /* Ajustar padding */
+}
+
+li {
+  margin-bottom: 0.6em;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out; /* Transição suave */
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* Ajustes para mobile */
+@media (max-width: 767px) {
+  :root {
+    /* Reduzir um pouco os títulos em telas menores */
+    --font-size-h1: 2rem;
+    --font-size-h2: 1.75rem;
+    --font-size-h3: 1.5rem;
+  }
+  body {
+    font-size: 0.95rem; /* Leve redução da fonte base se necessário, mas 1rem é geralmente bom */
+    line-height: 1.6; /* Pode ajustar a altura da linha também */
+  }
+}
+
+/* Configuração do plugin @tailwindcss/typography deve ser feita em tailwind.config.js */
+/* Exemplo:
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
+  theme: {
+    extend: {
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.foreground'), // Usa nossa variável
+            a: {
+              color: theme('colors.primary'), // Usa nossa variável
+              '&:hover': {
+                color: theme('colors.primary-dark'), // Usa nossa variável
+              },
+            },
+            // ... outros estilos prose
+          },
+        },
+      }),
+      colors: { // Mapeia variáveis CSS para o Tailwind
+        primary: 'var(--color-primary)',
+        'primary-dark': 'var(--color-primary-dark)',
+        secondary: 'var(--color-secondary)',
+        accent: 'var(--color-accent)',
+        background: 'var(--color-background)',
+        surface: 'var(--color-surface)',
+        foreground: 'var(--color-foreground)',
+        'text-light': 'var(--color-text-light)',
+        border: 'var(--color-border)',
+        error: 'var(--color-error)',
+        success: 'var(--color-success)',
+      },
+    },
+  },
+*/

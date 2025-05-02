@@ -1,0 +1,372 @@
+Aplicação Web - Semente de Projeto
+
+Subtítulo: Seu Guia para Editais e Políticas
+
+1. Wireframes Conceituais
+
+Estes são esboços de baixo nível, focando na estrutura e disposição dos elementos, não no design visual final.
+
+a) Layout Geral (Desktop)
+
++--------------------------------------------------------------------------+
+| Header                                                                   |
+| [Logo/Nome App: Trilha PCT]                 [Ícone Ajuda (?)] [Ícone User (Opcional)] |
++--------------------------------------------------------------------------+
+| Sidebar (Vertical)           | Content Area                              |
+|------------------------------|-------------------------------------------|
+| [ Módulo 1: Ferramentas ]    |                                           |
+|   - Introdução               |  [Título do Módulo/Seção]                 |
+|   - Formatação Texto         |                                           |
+|   - Imagens                  |  [Conteúdo principal da página:           |
+|   - Templates                |   Textos explicativos, imagens,           |
+|                              |   listas, botões de download,             |
+| [ Módulo 2: Pesquisa ]       |   checklists interativos,                 |
+|   - Onde Buscar?             |   links externos, glossário...]           |
+|   - Usando IAs (Chatbots)    |                                           |
+|   - Alertas                  |                                           |
+|                              |                                           |
+| [ Módulo 3: Decifrando ]     |                                           |
+|   - Anatomia Edital          |                                           |
+|   - Glossário                |                                           |
+|   - Direitos PCT             |                                           |
+|   - Checklist Análise        |                                           |
+|                              |                                           |
+| [ Módulo 4: Elaborando ]     |                                           |
+|   - Estrutura Projeto        |                                           |
+|   - Templates Projeto        |                                           |
+|   - Dicas Escrita            |                                           |
+|                              |                                           |
+| [ Módulo 5: Ação e Apoio ]   |                                           |
+|   - Checklist Final          |                                           |
+|   - Como Enviar              |                                           |
+|   - Acompanhamento           |                                           |
+|   - Rede de Apoio            |                                           |
+|                              |                                           |
++------------------------------+-------------------------------------------+
+
+
+b) Layout Geral (Mobile)
+
++----------------------------------+
+| Header                           |
+| [☰ Menu] [Nome App: Trilha PCT] [?]|
++----------------------------------+
+| Content Area                     |
+|                                  |
+|  [Título do Módulo/Seção]        |
+|                                  |
+|  [Conteúdo principal...]         |
+|                                  |
+|  [...]                           |
+|                                  |
+|                                  |
+|                                  |
+|                                  |
+|                                  |
+|                                  |
+|                                  |
++----------------------------------+
+
+  *Ao clicar em [☰ Menu]:*
+  +----------------------------------+
+  | Sidebar (Overlay ou Push)        |
+  |----------------------------------|
+  | [ Módulo 1: Ferramentas ]        |
+  |   - Introdução                   |
+  |   - ...                          |
+  | [ Módulo 2: Pesquisa ]           |
+  |   - ...                          |
+  | [ Módulo 3: Decifrando ]         |
+  |   - ...                          |
+  | [ Módulo 4: Elaborando ]         |
+  |   - ...                          |
+  | [ Módulo 5: Ação e Apoio ]       |
+  |   - ...                          |
+  | [Fechar X]                       |
+  +----------------------------------+
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+c) Wireframe Exemplo - Página de Módulo (Ex: Módulo 1)
+
++--------------------------------------------------------------------------+
+| Header                                                                   |
++--------------------------------------------------------------------------+
+| Sidebar                      | Content Area                              |
+|------------------------------|-------------------------------------------|
+| [ Módulo 1: Ferramentas ]<-ATIVO|  **Módulo 1: Ferramentas Essenciais**    |
+|   - Introdução <--- ATIVO    |                                           |
+|   - Formatação Texto         |  *Bem-vindo(a)! Neste módulo, vamos...*   |
+|   - Imagens                  |  (Texto introdutório curto e acolhedor)   |
+|   - Templates                |                                           |
+|                              |  **1. Formatando seus Textos**            |
+| [ Módulo 2: Pesquisa ]       |  - Dicas simples sobre títulos, parágrafos|
+|   ...                        |  - Exemplo: *Use negrito para destacar.*  |
+|                              |                                           |
+| [ Módulo 3: Decifrando ]     |  **2. Usando Imagens Simples**            |
+|   ...                        |  - Onde encontrar imagens (se aplicável)  |
+|                              |  - Como inserir no documento (dica)       |
+| [ Módulo 4: Elaborando ]     |                                           |
+|   ...                        |  **3. Templates Prontos para Usar**       |
+|                              |  [Ícone Doc] Modelo de Ofício Simples     |
+| [ Módulo 5: Ação e Apoio ]   |        [ Botão: Baixar (.docx) ]          |
+|   ...                        |  [Ícone Doc] Modelo de Declaração Simples |
+|                              |        [ Botão: Baixar (.odt)  ]          |
+|                              |  [Ícone Planilha] Modelo Orçamento Básico |
+|                              |        [ Botão: Baixar (.xlsx) ]          |
+|                              |                                           |
+|                              |  [ Botão: Próximo > (Ir para Módulo 2) ]  |
++------------------------------+-------------------------------------------+
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+
+2. Recomendações e Instruções de Desenvolvimento (Next.js)
+
+Estrutura de Pastas (Sugestão usando App Router - mais moderno):
+
+/app
+  /layout.js             # Layout principal (inclui Header, Sidebar)
+  /page.js               # Página inicial (pode redirecionar para o Módulo 1)
+  /globals.css           # Estilos globais
+  /modulo
+    /[slug]              # Rota dinâmica para os módulos
+      /page.js           # Componente da página do módulo
+  /components
+    /Header.js
+    /Sidebar.js
+    /SidebarItem.js
+    /ContentCard.js      # (Opcional) para padronizar blocos de conteúdo
+    /DownloadButton.js
+    /ChecklistItem.js
+  /styles                # (Opcional) CSS Modules ou Styled Components
+  /public                # Arquivos estáticos (imagens, templates para download)
+    /templates
+      oficio.docx
+      declaracao.odt
+      orcamento.xlsx
+
+Alternativa (Pages Router): Estrutura similar dentro da pasta /pages, com _app.js e _document.js para layout e configuração.
+
+Tecnologias e Bibliotecas:
+
+Next.js: Framework base (App Router recomendado para novos projetos).
+
+React: Biblioteca UI.
+
+CSS:
+
+Tailwind CSS (Recomendado): Excelente para prototipagem rápida, consistência e responsividade com classes utilitárias. Mantém o HTML um pouco mais verboso, mas agiliza o desenvolvimento.
+
+CSS Modules: Boa opção para escopar estilos por componente.
+
+Styled Components/Emotion: Se preferir CSS-in-JS.
+
+Component Library (Opcional): Chakra UI, Mantine UI, ou Material UI (MUI) podem oferecer componentes prontos (botões, modais, etc.), mas podem adicionar complexidade. Avaliar se a simplicidade do Tailwind não é suficiente.
+
+Ícones: react-icons é uma biblioteca excelente e fácil de usar.
+
+Estado (Simples): useState e useContext do React devem ser suficientes para controlar o estado do menu mobile, checklists, etc. Não deve ser necessário Redux ou Zustand inicialmente.
+
+Componentização:
+
+Layout: Componente principal que envolve todas as páginas. Renderiza o Header e o Sidebar (controlando sua exibição em mobile) e a área de conteúdo (children).
+
+Header: Exibe o logo/título e os ícones básicos. Pode conter a lógica para abrir/fechar o menu sidebar em mobile.
+
+Sidebar: Responsável por listar os módulos. Recebe a lista de módulos e o slug do módulo ativo (via props ou useParams/useRouter) para destacar o item correto. Em mobile, deve ter lógica para ser exibido/oculto.
+
+SidebarItem: Componente para cada link de módulo na sidebar. Usa next/link para navegação sem refresh.
+
+Página do Módulo (/app/modulo/[slug]/page.js): Componente que recebe o slug do módulo via parâmetros da URL. Busca (ou define estaticamente) o conteúdo específico daquele módulo e o renderiza na área de conteúdo. Pode usar switch ou if/else baseado no slug para mostrar o conteúdo correto, ou carregar dados de arquivos Markdown/JSON se o conteúdo for mais complexo.
+
+Componentes Reutilizáveis: Criar componentes para elementos repetidos como DownloadButton, ChecklistItem, GlossaryTerm, InfoBox, etc., para manter o código limpo e consistente.
+
+Navegação e Roteamento:
+
+Usar o next/link para navegação interna entre os módulos para aproveitar o pré-carregamento e a navegação do lado do cliente do Next.js.
+
+A rota dinâmica [slug] permite que /modulo/ferramentas, /modulo/pesquisa, etc., usem o mesmo componente de página (page.js), apenas variando o conteúdo com base no slug.
+
+Estilo e UI/UX:
+
+Simplicidade Visual: FOCO TOTAL NISSO. Usar bastante espaço em branco, tipografia clara e legível (ex: Nunito Sans, Inter), tamanho de fonte adequado (mínimo 16px para corpo de texto).
+
+Cores: Paleta de cores simples e com bom contraste. Usar cores primárias com moderação, talvez tons terrosos ou verdes que remetam à natureza, mas sempre garantindo acessibilidade (verificar contraste).
+
+Ícones: Usar de forma consistente e apenas onde agregam valor (download, ajuda, menu, links externos). react-icons facilita isso.
+
+Responsividade: Mobile-first é crucial. Testar em diversos tamanhos de tela. Garantir que botões e links sejam fáceis de tocar em telas pequenas.
+
+Interatividade: Manter simples. Checklists podem usar useState para controlar o estado checked. Glossários podem ser listas simples ou usar um componente de Acordeão/Expansão se forem muitos termos.
+
+Linguagem: O texto da interface (labels, botões, títulos) deve ser extremamente claro, direto e acessível, evitando jargões.
+
+Conteúdo:
+
+Inicialmente, o conteúdo pode ser "hardcoded" diretamente nos componentes React ou em arquivos simples (ex: JSON ou Markdown) importados pelos componentes.
+
+Se houver necessidade de atualização frequente por não-desenvolvedores no futuro, pensar em integrar um Headless CMS (como Strapi, Contentful, Sanity), mas começar simples é melhor.
+
+Os templates para download devem estar na pasta /public.
+
+Acessibilidade (a11y):
+
+Usar HTML semântico (<nav>, <main>, <header>, <button>, etc.).
+
+Garantir contraste de cores adequado.
+
+Testar navegação por teclado.
+
+Adicionar atributos alt descritivos para imagens importantes.
+
+Usar ARIA attributes onde necessário (ex: para indicar estado de menu mobile).
+
+Instruções Chave para o Desenvolvedor:
+
+Priorize a Simplicidade: Menos é mais. Evite animações complexas ou layouts sobrecarregados.
+
+Foco no Mobile: Comece estilizando para telas pequenas e depois ajuste para desktop.
+
+Consistência: Use os mesmos estilos para elementos similares (botões, títulos, links) em todas as páginas.
+
+Clareza: Garanta que a navegação (Sidebar) seja óbvia e que o conteúdo de cada módulo seja fácil de ler e entender.
+
+Desempenho: Otimize imagens e use as funcionalidades do Next.js para um carregamento rápido.
+
+Reflexão sobre o Fluxo Lógico:
+
+Módulo 1 (Ferramentas): Sei COMO fazer um documento básico.
+
+Módulo 2 (Pesquisa): Sei ONDE encontrar oportunidades (editais).
+
+Módulo 3 (Compreensão): Encontrei um edital, e agora? Preciso ENTENDER o que ele pede e quais DIREITOS/POLÍTICAS me apoiam.
+
+Módulo 4 (Elaboração): Entendi o edital, agora preciso ESTRUTURAR MINHA IDEIA/PROJETO de acordo com o que foi pedido.
+
+Módulo 5 (Ação e Continuidade): Tenho o projeto pronto, como faço para ENVIAR, ACOMPANHAR e onde buscar AJUDA?
+
+Proposta para os Módulos 3, 4 e 5:
+
+Módulo 3: Decifrando Editais e Políticas Específicas para PCTs
+
+Objetivo: Capacitar os jovens a ler, interpretar e entender os requisitos de um edital, conectando-os com as políticas públicas e direitos específicos para Povos e Comunidades Tradicionais (PCTs).
+
+Funcionalidades da Página/Interface:
+
+"Anatomia de um Edital": Uma seção interativa ou visual que desmonta um edital genérico (ou um exemplo real simplificado), explicando cada parte comum:
+
+Objeto (O que o edital financia?)
+
+Público-alvo/Elegibilidade (Quem pode participar? Destacar critérios para PCTs)
+
+Prazos (Inscrição, execução, prestação de contas)
+
+Documentação Exigida (Listar documentos comuns e onde podem conseguir - linkar com Módulo 1)
+
+Critérios de Avaliação (O que será pontuado?)
+
+Orçamento/Valores (Quanto financia? O que pode ser pago?)
+
+Contatos/Dúvidas (Para quem perguntar?)
+
+Glossário de Termos: Uma lista simples de termos comuns em editais (ex: proponente, contrapartida, rubrica, plano de trabalho, CNPJ, certidões negativas) com explicações claras e diretas.
+
+"Seus Direitos e Políticas": Seção dedicada a apresentar, de forma MUITO simplificada, as principais políticas públicas e direitos que beneficiam PCTs (Fundo e Fecho de Pasto incluídos).
+
+Links para sites governamentais relevantes (INCRA, MDA, Fundação Palmares, FUNAI, Secretarias Estaduais, etc.), mas com um resumo direto do que é importante para eles.
+
+Exemplos de como esses direitos podem ser mencionados ou usados em projetos (ex: direito ao território, políticas de ATER - Assistência Técnica e Extensão Rural, PAA - Programa de Aquisição de Alimentos, etc.).
+
+Checklist Interativo: "O que verificar antes de começar?" - um checklist simples para os jovens marcarem ao analisar um edital (Ex: "Verifiquei o prazo?", "Minha comunidade se encaixa no público-alvo?", "Entendi os documentos necessários?").
+
+Módulo 4: Da Ideia ao Projeto: Elaborando sua Proposta
+
+Objetivo: Guiar os jovens na transformação de uma ideia ou necessidade da comunidade em um projeto estruturado, pronto para ser escrito nos moldes de um edital. Foco na clareza e objetividade.
+
+Funcionalidades da Página/Interface:
+
+"Estrutura Básica de um Projeto": Apresentar os componentes essenciais de um projeto simples:
+
+Título (Claro e direto)
+
+Apresentação/Justificativa (Por que esse projeto é importante para a comunidade? Qual problema resolve ou necessidade atende?) - Com exemplos práticos da realidade deles.
+
+Objetivos (Geral e Específicos: O que queremos alcançar com o projeto?) - Ensinar a usar verbos no infinitivo (Ex: construir, capacitar, comprar).
+
+Metodologia/Plano de Ação (Como vamos fazer? Passo a passo simples).
+
+Cronograma (Quando cada passo será realizado? Um modelo de tabela simples).
+
+Orçamento Simplificado (Quanto vai custar cada item? Onde pesquisar preços?) - Modelo de planilha básica.
+
+Templates Simplificados (Linkados ao Módulo 1): Oferecer modelos muito básicos em formato .doc ou .odt (editáveis) para cada seção do projeto, já com dicas de preenchimento.
+
+Banco de Ideias Inspiradoras (Opcional): Exemplos curtos de projetos que poderiam ser relevantes para comunidades de Fundo e Fecho de Pasto (Ex: Horta comunitária, pequeno beneficiamento de produto local, oficina de artesanato, acesso à água, evento cultural, etc.). Isso pode ajudar a destravar a criatividade.
+
+Dicas de Escrita: Conselhos simples sobre como escrever de forma clara, objetiva e persuasiva, mesmo com linguagem simples. Evitar erros comuns.
+
+Módulo 5: Submissão, Acompanhamento e Rede de Apoio
+
+Objetivo: Orientar sobre os passos práticos para enviar a documentação, como acompanhar o resultado e, crucialmente, onde buscar ajuda e informações adicionais.
+
+Funcionalidades da Página/Interface:
+
+Checklist Final de Submissão: Um último checklist interativo antes de enviar: "Todos os documentos estão anexados?", "O formulário online está preenchido?", "Revisou a ortografia?", "Enviou dentro do prazo?".
+
+"Como Enviar?": Explicar os métodos mais comuns de envio:
+
+Plataformas Online (Ex: Plataforma +Brasil - mostrar prints de tela genéricos, se possível, ou descrever o processo).
+
+E-mail (Dicas de como organizar os anexos, assunto do e-mail).
+
+Correios/Protocolo Físico (Menos comum hoje, mas pode ser necessário).
+
+"E Depois? O Acompanhamento":
+
+Explicar a importância de guardar comprovantes de envio.
+
+Como verificar o status da proposta (sites, Diário Oficial - explicar o que é de forma simples).
+
+O que fazer se for aprovado (próximos passos básicos: assinatura de termo, recebimento de recursos, importância da prestação de contas - introduzir a ideia).
+
+O que fazer se for reprovado (pedir feedback, se possível, e não desistir!).
+
+"Quem Pode Ajudar? Sua Rede de Apoio": Uma seção VITAL.
+
+Listar contatos ou tipos de organizações que podem oferecer suporte:
+
+Associações comunitárias locais/regionais.
+
+Sindicatos de Trabalhadores Rurais.
+
+ONGs que atuam na região.
+
+Escritórios locais de órgãos como EMATER, Secretarias de Agricultura/Desenvolvimento Rural, Prefeituras (Secretarias de Assistência Social, Cultura, etc.).
+
+Universidades com projetos de extensão.
+
+Incentivar a troca de experiências entre os próprios jovens e comunidades.
+
+Link para Ferramentas de Pesquisa (Módulo 2): Reforçar que a busca por editais é contínua.
+
+Considerações Adicionais para a Interface Next.js:
+
+Simplicidade Visual: Use cores calmas, fontes legíveis e bastante espaço em branco. Evite excesso de informação na tela.
+
+Ícones Intuitivos: Use ícones que reforcem o significado de cada seção (ex: lupa para pesquisa, documento para templates, interrogação para ajuda, rede de pessoas para apoio).
+
+Linguagem Acessível: Use português claro, direto e evite jargões técnicos ou explique-os imediatamente (como no glossário). Se possível, valide a linguagem com alguns jovens da comunidade.
+
+Responsividade: Garanta que a interface funcione bem em celulares, pois pode ser o principal meio de acesso para muitos jovens.
+
+Interatividade: Os checklists e talvez pequenos quizzes ao final de cada módulo podem ajudar a fixar o conhecimento.
+
+Recursos para Download: Disponibilize os templates e checklists em formatos para download (PDF, DOCX, ODT) para quem quiser usar offline ou imprimir.
+
+
