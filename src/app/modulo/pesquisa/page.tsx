@@ -5,37 +5,34 @@ import PageTemplate from '@/components/PageTemplate';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, Lightbulb, Bell } from 'lucide-react';
+import { ContentCard } from '@/components/ContentCard';
 import SearchResults from '@/components/modules/pesquisa/search-results';
 import AIAssistant from '@/components/modules/pesquisa/ai-assistant';
 import AlertSystem from '@/components/modules/pesquisa/alert-system';
 
 export default function PesquisaPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
 
-  // Simulação de busca
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!searchQuery.trim()) return;
-
     setIsSearching(true);
     
-    // Simulação de delay de rede
+    // Simular busca com delay
     setTimeout(() => {
-      // Dados simulados de resultados de pesquisa
       const mockResults = [
         {
           id: 1,
-          title: 'Edital de Financiamento Cultural 2025',
-          excerpt: 'Programa de apoio a projetos culturais com foco em inclusão e diversidade...',
+          title: 'Edital XPTO 2025 - Apoio a Projetos Culturais',
+          excerpt: 'Financiamento para iniciativas culturais em comunidades tradicionais...',
           category: 'Editais Abertos',
-          date: '2025-04-28',
-          relevance: 98
+          date: '2025-04-01',
+          relevance: 100
         },
         {
           id: 2,
-          title: 'Guia de Elaboração de Projetos Culturais',
+          title: 'Guia de Elaboração de Projetos',
           excerpt: 'Manual completo com orientações para desenvolvimento de propostas competitivas...',
           category: 'Guias e Manuais',
           date: '2025-03-15',
@@ -48,22 +45,6 @@ export default function PesquisaPage() {
           category: 'Exemplos',
           date: '2025-02-10',
           relevance: 90
-        },
-        {
-          id: 4,
-          title: 'Webinar: Como elaborar orçamentos eficientes',
-          excerpt: 'Apresentação sobre técnicas de planejamento financeiro para projetos culturais...',
-          category: 'Webinars',
-          date: '2025-01-22',
-          relevance: 85
-        },
-        {
-          id: 5,
-          title: 'Relatório de Tendências em Editais 2025',
-          excerpt: 'Análise das principais tendências e prioridades dos editais culturais para o ano...',
-          category: 'Relatórios',
-          date: '2025-01-05',
-          relevance: 82
         }
       ];
       
@@ -74,8 +55,8 @@ export default function PesquisaPage() {
 
   return (
     <PageTemplate
-      title="Pesquisa Avançada"
-      description="Encontre editais, guias e recursos para seus projetos culturais"
+      title="Pesquisa de Editais"
+      description="Encontre e monitore oportunidades para sua comunidade"
       variant="default"
       breadcrumbs={[
         { label: 'Início', href: '/' },
@@ -83,52 +64,70 @@ export default function PesquisaPage() {
         { label: 'Pesquisa', href: '/modulo/pesquisa' }
       ]}
     >
-      <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">Busca Inteligente</h2>
-        <div className="bg-white rounded-lg shadow-sm border p-6">
+      <div className="space-y-8">
+        {/* Interface de Busca */}
+        <ContentCard>
           <form onSubmit={handleSearch} className="space-y-4">
-            <div className="flex flex-col md:flex-row gap-3">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1">
                 <Input
-                  type="text"
-                  placeholder="Busque por editais, guias, exemplos de projetos..."
-                  className="pl-10"
+                  type="search"
+                  placeholder="Busque por editais, guias ou recursos..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full"
                 />
               </div>
               <Button type="submit" disabled={isSearching}>
-                {isSearching ? 'Buscando...' : 'Pesquisar'}
+                <Search className="w-4 h-4 mr-2" />
+                {isSearching ? 'Buscando...' : 'Buscar'}
               </Button>
             </div>
-            <div className="text-sm text-muted-foreground">
-              Dica: Use termos específicos como "edital audiovisual" ou "modelo de orçamento"
+
+            <div className="flex flex-wrap gap-2 text-sm">
+              <span className="text-muted-foreground">Sugestões:</span>
+              <Button
+                variant="link"
+                type="button"
+                className="p-0 h-auto"
+                onClick={() => setSearchQuery('projetos culturais')}
+              >
+                projetos culturais
+              </Button>
+              <Button
+                variant="link"
+                type="button"
+                className="p-0 h-auto"
+                onClick={() => setSearchQuery('apoio agricultura familiar')}
+              >
+                apoio agricultura familiar
+              </Button>
             </div>
           </form>
-        </div>
-      </section>
+        </ContentCard>
 
-      {searchResults.length > 0 && (
-        <SearchResults results={searchResults} />
-      )}
+        {/* Resultados da Busca */}
+        {searchResults.length > 0 && (
+          <SearchResults results={searchResults} isLoading={isSearching} />
+        )}
 
-      <div className="grid md:grid-cols-2 gap-6 mb-12">
-        <section>
+        {/* Assistente IA */}
+        <ContentCard>
           <div className="flex items-center gap-2 mb-4">
-            <Lightbulb className="h-5 w-5 text-amber-500" />
-            <h2 className="text-2xl font-semibold">Assistente IA</h2>
+            <Lightbulb className="w-5 h-5 text-primary" />
+            <h2 className="text-lg font-semibold">Assistente de Busca</h2>
           </div>
           <AIAssistant />
-        </section>
+        </ContentCard>
 
-        <section>
+        {/* Sistema de Alertas */}
+        <ContentCard>
           <div className="flex items-center gap-2 mb-4">
-            <Bell className="h-5 w-5 text-blue-500" />
-            <h2 className="text-2xl font-semibold">Alertas de Editais</h2>
+            <Bell className="w-5 h-5 text-primary" />
+            <h2 className="text-lg font-semibold">Alertas</h2>
           </div>
           <AlertSystem />
-        </section>
+        </ContentCard>
       </div>
     </PageTemplate>
   );

@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, ExternalLink, FileText, BookOpen, Scale, Download } from 'lucide-react';
+import { Search, ExternalLink, FileText, BookOpen, Scale, Download, Info } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface Politica {
   id: string;
@@ -206,94 +212,97 @@ const PoliticasLinks: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input
-            type="text"
-            placeholder="Buscar políticas e legislações..."
-            className="pl-10"
-            value={filtro}
-            onChange={handleFiltro}
-          />
+    <div className="space-y-8">
+      {/* Seção de Políticas */}
+      <section>
+        <h3 className="text-lg font-medium mb-4">Principais Políticas Públicas</h3>
+        <div className="grid gap-4">
+          {politicasFiltradas.map((politica) => (
+            <motion.div
+              key={politica.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Card>
+                <CardHeader className="pb-2">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      {tipoIcone(politica.tipo)}
+                      <Badge variant="outline">
+                        {tipoLabel(politica.tipo)}
+                      </Badge>
+                      <Badge className={relevanciaColor(politica.relevancia)}>
+                        {politica.relevancia === 'alta' ? 'Essencial' : 
+                         politica.relevancia === 'média' ? 'Importante' : 'Complementar'}
+                      </Badge>
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {politica.ano}
+                    </div>
+                  </div>
+                  <CardTitle className="text-lg mt-2">{politica.titulo}</CardTitle>
+                  <CardDescription className="mt-1">
+                    {politica.descricao}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pb-2">
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {politica.tags.map((tag, idx) => (
+                      <Badge key={idx} variant="secondary" className="text-xs">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-between pt-2">
+                  <Button variant="outline" size="sm" className="gap-1">
+                    <Download className="h-3.5 w-3.5" />
+                    PDF
+                  </Button>
+                  <Button size="sm" className="gap-1" asChild>
+                    <a href={politica.link} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      Acessar
+                    </a>
+                  </Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
+          ))}
         </div>
+      </section>
+
+      {/* Seção de Órgãos */}
+      <section>
+        <h3 className="text-lg font-medium mb-4">Órgãos e Instituições Importantes</h3>
+        <div className="grid sm:grid-cols-2 gap-4">
+          {orgaos.map((orgao) => (
+            <Card key={orgao.nome} className="p-4">
+              <h4 className="font-medium">{orgao.nome}</h4>
+              <p className="text-sm text-muted-foreground mt-1">
+                {orgao.descricao}
+              </p>
+              <Button
+                variant="link"
+                className="mt-2 h-auto p-0"
+                onClick={() => window.open(orgao.link, '_blank')}
+              >
+                <ExternalLink className="h-4 w-4 mr-1" />
+                Visitar site
+              </Button>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mt-6">
+        <p className="text-sm text-blue-700">
+          <strong>Dica:</strong> Ao elaborar seu projeto, mencione como ele se
+          alinha com estas políticas públicas. Isso demonstra que você conhece o
+          contexto e fortalece sua proposta.
+        </p>
       </div>
-
-      <Tabs value={tipoAtivo} onValueChange={handleTipoChange} className="space-y-4">
-        <TabsList className="grid grid-cols-3 sm:grid-cols-6">
-          <TabsTrigger value="todos">Todos</TabsTrigger>
-          <TabsTrigger value="lei">Leis</TabsTrigger>
-          <TabsTrigger value="decreto">Decretos</TabsTrigger>
-          <TabsTrigger value="instrucao">Instruções</TabsTrigger>
-          <TabsTrigger value="portaria">Portarias</TabsTrigger>
-          <TabsTrigger value="manual">Manuais</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value={tipoAtivo} className="mt-6">
-          {politicasFiltradas.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <p>Nenhuma política ou legislação encontrada com os filtros atuais</p>
-            </div>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2">
-              {politicasFiltradas.map((politica) => (
-                <motion.div
-                  key={politica.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Card>
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-2">
-                          {tipoIcone(politica.tipo)}
-                          <Badge variant="outline">
-                            {tipoLabel(politica.tipo)}
-                          </Badge>
-                          <Badge className={relevanciaColor(politica.relevancia)}>
-                            {politica.relevancia === 'alta' ? 'Essencial' : 
-                             politica.relevancia === 'média' ? 'Importante' : 'Complementar'}
-                          </Badge>
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {politica.ano}
-                        </div>
-                      </div>
-                      <CardTitle className="text-lg mt-2">{politica.titulo}</CardTitle>
-                      <CardDescription className="mt-1">
-                        {politica.descricao}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="pb-2">
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {politica.tags.map((tag, idx) => (
-                          <Badge key={idx} variant="secondary" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-between pt-2">
-                      <Button variant="outline" size="sm" className="gap-1">
-                        <Download className="h-3.5 w-3.5" />
-                        PDF
-                      </Button>
-                      <Button size="sm" className="gap-1" asChild>
-                        <a href={politica.link} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="h-3.5 w-3.5" />
-                          Acessar
-                        </a>
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
     </div>
   );
 };

@@ -4,59 +4,87 @@ import React from 'react';
 import PageTemplate from '@/components/PageTemplate';
 import { ProjectStructure } from '@/components/modules/propostas/ProjectStructure';
 import { IdeaBank } from '@/components/modules/propostas/IdeaBank';
-import { BeforeAfterExample } from '@/components/BeforeAfterExample';
-import { DownloadButton } from '@/components/DownloadButton';
+import { WritingGuide } from '@/components/modules/propostas/WritingGuide';
 import { ContentCard } from '@/components/ContentCard';
 
-// Dados de exemplo para antes/depois
-const writingExamples = [
+// Seções do projeto com dicas e exemplos
+const projectSections = [
   {
-    id: 'justificativa',
-    title: 'Justificativa',
-    before: 'A gente quer fazer esse projeto porque é importante pra comunidade ter uma horta.',
-    after: 'Este projeto de horta comunitária atenderá uma necessidade urgente de nossa comunidade: o acesso a alimentos frescos e saudáveis. Atualmente, 30 famílias precisam se deslocar 15km até a cidade mais próxima para comprar verduras e legumes, aumentando o custo da alimentação.',
-    explanation: 'A nova versão apresenta dados concretos (número de famílias, distância) e explica claramente o problema que o projeto resolverá.'
+    title: 'Título do Projeto',
+    description: 'Seja específico e direto. Mencione o principal objetivo e o público-alvo.',
+    tips: [
+      'Use no máximo 10-15 palavras',
+      'Inclua palavras-chave relevantes',
+      'Evite títulos genéricos'
+    ],
+    example: 'Oficina de Artesanato em Palha: Preservando Saberes Tradicionais na Comunidade Quilombola Terra Firme'
   },
   {
-    id: 'objetivos',
+    title: 'Justificativa',
+    description: 'Explique por que o projeto é importante e qual problema ele resolve.',
+    tips: [
+      'Apresente dados concretos quando possível',
+      'Relacione com a realidade da comunidade',
+      'Mencione políticas públicas relevantes'
+    ],
+    example: 'A comunidade Terra Firme possui 30 artesãs que mantêm viva a tradição do trançado em palha, conhecimento passado por gerações. No entanto, observamos uma diminuição no interesse dos jovens por essa prática, arriscando a perda desse patrimônio cultural.'
+  },
+  {
     title: 'Objetivos',
-    before: 'Queremos fazer uma horta e ensinar as pessoas a plantar.',
-    after: '1. Implantar uma horta comunitária de 500m² para produção de hortaliças orgânicas;\n2. Capacitar 20 moradores em técnicas de agricultura orgânica;\n3. Estabelecer um sistema de gestão compartilhada da horta entre as famílias participantes.',
-    explanation: 'Os objetivos agora são específicos, mensuráveis e organizados em tópicos claros.'
+    description: 'O que o projeto pretende alcançar, dividido em geral e específicos.',
+    tips: [
+      'Use verbos no infinitivo (realizar, promover, capacitar)',
+      'Objetivos específicos devem ser mensuráveis',
+      'Limite-se a 3-5 objetivos específicos'
+    ],
+    example: `Objetivo Geral: Fortalecer a transmissão dos saberes tradicionais do artesanato em palha através de oficinas intergeracionais.
+
+Objetivos Específicos:
+1. Capacitar 15 jovens nas técnicas tradicionais de trançado
+2. Realizar 10 oficinas práticas com mestras artesãs
+3. Produzir um catálogo digital com as técnicas e histórias`
+  },
+  {
+    title: 'Metodologia',
+    description: 'Como o projeto será realizado na prática.',
+    tips: [
+      'Detalhe cada etapa do projeto',
+      'Explique quem fará o quê',
+      'Inclua cronograma de atividades'
+    ],
+    example: `1. Mobilização (Mês 1):
+- Reuniões com lideranças e artesãs
+- Inscrição dos jovens interessados
+
+2. Oficinas (Meses 2-5):
+- Encontros semanais de 4 horas
+- Registro fotográfico e em vídeo
+
+3. Documentação (Mês 6):
+- Organização do material coletado
+- Produção do catálogo digital`
   }
 ];
 
-// Estrutura do projeto com seções detalhadas
-const projectSections = [
+// Exemplos de escrita para o guia
+const writingExamples = [
   {
-    title: 'Identificação',
-    description: 'Dados básicos do projeto e da organização proponente',
+    before: 'A gente quer fazer oficinas de artesanato porque é importante pra comunidade.',
+    after: 'Propomos a realização de oficinas de artesanato tradicional como estratégia para preservar os saberes ancestrais de nossa comunidade, fortalecendo a identidade cultural e gerando oportunidades de renda para 20 famílias.',
     tips: [
-      'Inclua nome do projeto, organização responsável e dados de contato',
-      'Adicione um resumo curto do projeto (até 3 linhas)',
-      'Mencione o valor total solicitado'
-    ],
-    template: 'Nome do Projeto: [título]\nOrganização: [nome]\nResponsável: [nome]\nContato: [email/telefone]\nValor: R$ [total]'
+      'Use linguagem formal, mas clara',
+      'Apresente números e dados específicos',
+      'Explique os benefícios concretos'
+    ]
   },
   {
-    title: 'Justificativa',
-    description: 'Por que o projeto é importante? Qual problema ele resolve?',
+    before: 'Vai ter aula de trançado toda semana.',
+    after: 'O projeto prevê a realização de oficinas semanais de trançado em palha, com duração de 4 horas cada, ministradas por mestras artesãs da comunidade. As atividades incluirão teoria e prática, com demonstrações técnicas e exercícios supervisionados.',
     tips: [
-      'Descreva a situação atual da comunidade',
-      'Use dados concretos quando possível',
-      'Explique por que agora é o momento ideal'
-    ],
-    template: '1. Contexto atual: [descreva]\n2. Problema específico: [detalhe]\n3. Por que é importante resolver: [explique]'
-  },
-  {
-    title: 'Objetivos',
-    description: 'O que o projeto pretende alcançar',
-    tips: [
-      'Use verbos no infinitivo (construir, capacitar, implementar)',
-      'Seja específico e mensurável',
-      'Divida em objetivo geral e específicos'
-    ],
-    template: 'Objetivo Geral: [descreva]\n\nObjetivos Específicos:\n1. [objetivo 1]\n2. [objetivo 2]\n3. [objetivo 3]'
+      'Detalhe as atividades',
+      'Especifique duração e frequência',
+      'Mencione os responsáveis'
+    ]
   }
 ];
 
@@ -64,43 +92,27 @@ export default function ElaborandoPropostas() {
   return (
     <PageTemplate
       title="Elaborando Propostas"
-      description="Aprenda a transformar suas ideias em projetos estruturados"
+      description="Transforme suas ideias em projetos bem estruturados"
+      variant="default"
+      breadcrumbs={[
+        { label: 'Início', href: '/' },
+        { label: 'Módulos', href: '/modulo' },
+        { label: 'Elaborando', href: '/modulo/elaborando' }
+      ]}
     >
-      {/* Seção 1: Estrutura do Projeto */}
+      {/* Estrutura do Projeto */}
       <ContentCard className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Estrutura Básica do Projeto</h2>
+        <h2 className="text-2xl font-bold mb-4">Estrutura do Projeto</h2>
         <ProjectStructure sections={projectSections} />
       </ContentCard>
 
-      {/* Seção 2: Exemplos de Antes/Depois */}
+      {/* Guia de Escrita */}
       <ContentCard className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Exemplos de Escrita</h2>
-        <BeforeAfterExample
-          title="Melhorando a Escrita do Projeto"
-          description="Veja como melhorar a forma de apresentar suas ideias"
-          examples={writingExamples}
-        />
+        <h2 className="text-2xl font-bold mb-4">Guia de Escrita</h2>
+        <WritingGuide examples={writingExamples} />
       </ContentCard>
 
-      {/* Seção 3: Templates Disponíveis */}
-      <ContentCard className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Templates para Download</h2>
-        <p className="text-gray-600 mb-4">
-          Baixe modelos prontos para facilitar a elaboração do seu projeto:
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <DownloadButton
-            fileName="projeto-basico.docx"
-            label="Modelo de Projeto Básico"
-          />
-          <DownloadButton
-            fileName="planilha-orcamento.xlsx"
-            label="Planilha de Orçamento"
-          />
-        </div>
-      </ContentCard>
-
-      {/* Seção 4: Banco de Ideias */}
+      {/* Banco de Ideias */}
       <ContentCard>
         <h2 className="text-2xl font-bold mb-4">Banco de Ideias</h2>
         <IdeaBank />

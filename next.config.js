@@ -17,7 +17,8 @@ const nextConfig = {
   // Configuração para habilitar dados dinâmicos em páginas estáticas
   experimental: {
     // Habilitar compilação paralela
-    parallelServerCompiles: true,
+    // parallelServerCompiles foi desativado devido a problemas de compatibilidade
+    // parallelServerCompiles: true,
     // Usar linters durante a compilação
     workerThreads: true,
     // Otimizar para um melhor code splitting

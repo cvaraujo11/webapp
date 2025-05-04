@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import { SendIcon, RefreshCwIcon, Sparkles } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Send, RefreshCw } from 'lucide-react';
 
 const AIAssistant: React.FC = () => {
-  const [question, setQuestion] = useState('');
+  const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState<string | null>(null);
   const [conversation, setConversation] = useState<{type: 'user' | 'ai'; text: string}[]>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!question.trim()) return;
+    if (!query.trim()) return;
 
     // Adiciona a pergunta do usuário à conversa
-    const newConversation = [...conversation, {type: 'user', text: question}];
+    const newConversation = [...conversation, {type: 'user', text: query}];
     setConversation(newConversation);
     
     // Simula o processamento da IA
@@ -24,7 +24,7 @@ const AIAssistant: React.FC = () => {
     setTimeout(() => {
       // Respostas simuladas baseadas em palavras-chave na pergunta
       let aiResponse = '';
-      const lowerQuestion = question.toLowerCase();
+      const lowerQuestion = query.toLowerCase();
       
       if (lowerQuestion.includes('edital') || lowerQuestion.includes('financiamento')) {
         aiResponse = 'Os editais mais recentes de financiamento cultural estão disponíveis no módulo "Decifrando Editais". Recomendo verificar os editais da Lei Paulo Gustavo e do Fundo Nacional de Cultura que estão com inscrições abertas até o final do mês.';
@@ -40,7 +40,7 @@ const AIAssistant: React.FC = () => {
       setConversation([...newConversation, {type: 'ai', text: aiResponse}]);
       setResponse(aiResponse);
       setIsLoading(false);
-      setQuestion('');
+      setQuery('');
     }, 1500);
   };
 
@@ -54,17 +54,14 @@ const AIAssistant: React.FC = () => {
       <div className="mb-4 min-h-[200px] max-h-[300px] overflow-y-auto">
         {conversation.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-[200px] text-center text-muted-foreground">
-            <Sparkles className="h-8 w-8 mb-2 text-amber-400" />
             <p>Assistente IA pronto para responder suas dúvidas sobre editais e projetos culturais</p>
             <p className="text-sm mt-2">Experimente perguntar sobre editais abertos, dicas para elaboração de projetos ou estratégias de orçamento</p>
           </div>
         ) : (
-          <AnimatePresence>
+          <div>
             {conversation.map((message, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
                 className={`mb-3 p-3 rounded-lg ${
                   message.type === 'user' 
                     ? 'bg-primary-50 text-primary-900 ml-6' 
@@ -75,9 +72,9 @@ const AIAssistant: React.FC = () => {
                   {message.type === 'user' ? 'Você' : 'Assistente IA'}
                 </div>
                 <div>{message.text}</div>
-              </motion.div>
+              </div>
             ))}
-          </AnimatePresence>
+          </div>
         )}
         
         {isLoading && (
@@ -94,8 +91,8 @@ const AIAssistant: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-3">
         <Textarea
           placeholder="Digite sua pergunta sobre editais, projetos, orçamentos..."
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           className="min-h-[80px]"
         />
         
@@ -108,7 +105,7 @@ const AIAssistant: React.FC = () => {
               onClick={resetConversation}
               className="gap-1"
             >
-              <RefreshCwIcon className="h-3.5 w-3.5" />
+              <RefreshCw className="h-3.5 w-3.5" />
               Nova Conversa
             </Button>
           )}
@@ -116,10 +113,10 @@ const AIAssistant: React.FC = () => {
           <Button 
             type="submit" 
             size="sm" 
-            disabled={!question.trim() || isLoading}
+            disabled={!query.trim() || isLoading}
             className="gap-1 ml-auto"
           >
-            <SendIcon className="h-3.5 w-3.5" />
+            <Send className="h-3.5 w-3.5" />
             Enviar
           </Button>
         </div>
