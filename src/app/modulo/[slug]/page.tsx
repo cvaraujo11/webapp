@@ -1,8 +1,10 @@
 "use client";
-import React, { useState } from 'react'; // Import useState
+import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import DownloadButton from '@/components/DownloadButton';
 import ChecklistItem from '@/components/ChecklistItem';
-import ContentCard from '@/components/ContentCard'; // Importa o ContentCard
+import ContentCard from '@/components/ContentCard';
+import { ChevronDown, ChevronUp, BookOpen, FileText, Info } from 'lucide-react';
 
 // --- Estrutura de Dados para Conteúdo dos Módulos ---
 const moduleContent: { [key: string]: any } = {
@@ -81,7 +83,7 @@ const moduleContent: { [key: string]: any } = {
         <ul class="list-disc list-inside ml-4 my-2 text-gray-700">
           <li><strong>Modelo de Ofício:</strong> Use para solicitações formais a órgãos públicos ou parceiros.</li>
           <li><strong>Modelo de Declaração:</strong> Ideal para comprovar participação, residência ou vínculo com a comunidade.</li>
-          <li><strong>Modelo de Orçamento:</strong> Organize os custos do seu projeto de forma simples e clara.</li>
+          <li><strong>Modelo de Orçamento:</strong> Organize os custos do projeto de forma simples e clara.</li>
         </ul>
         <p class="mt-2 text-sm text-green-700">Esses modelos são aceitos na maioria dos editais e facilitam a organização dos documentos.</p>`,
       },
@@ -116,7 +118,7 @@ const moduleContent: { [key: string]: any } = {
             <li>Dica: Salve links importantes nos favoritos do seu navegador ou anote em um caderno.</li>
           </ul>
           <p class="mt-2 text-blue-700 text-sm">Exemplo prático: <br/>
-            <strong>Passo a passo:</strong> Entre no Portal Gov.br, busque por “editais abertos” e filtre por área de interesse (cultura, agricultura, juventude, etc.).
+            <strong>Passo a passo:</strong> Entre no Portal Gov.br, busque por "editais abertos" e filtre por área de interesse (cultura, agricultura, juventude, etc.).
           </p>
         `,
       },
@@ -245,7 +247,7 @@ const moduleContent: { [key: string]: any } = {
             <li><a href="https://www.gov.br/incra/pt-br" target="_blank" rel="noopener noreferrer" class="hover:underline">INCRA</a> (Terra, quilombolas)</li>
             <li><a href="https://www.gov.br/mds/pt-br" target="_blank" rel="noopener noreferrer" class="hover:underline">Ministério do Desenvolvimento Social</a> (PAA, políticas sociais)</li>
             <li><a href="https://www.gov.br/povosindigenas/pt-br" target="_blank" rel="noopener noreferrer" class="hover:underline">Ministério dos Povos Indígenas</a></li>
-            <li><a href="https://www.gov.br/igualdaderacial/pt-br" target="_blank" rel="noopener noreferrer" class="hover:underline">Ministério da Igualdade Racial</a> / <a href="https://www.gov.br/palmares/" target="_blank" rel="noopener noreferrer" class="hover:underline">Fundação Palmares</a></li>
+            <li><a href="https://www.gov.br/palmares/" target="_blank" rel="noopener noreferrer" class="hover:underline">Fundação Palmares</a></li>
             <li><a href="https://www.gov.br/mda/pt-br" target="_blank" rel="noopener noreferrer" class="hover:underline">Ministério do Desenvolvimento Agrário</a></li>
             <li><a href="https://www.gov.br/cultura/pt-br" target="_blank" rel="noopener noreferrer" class="hover:underline">Ministério da Cultura</a></li>
           </ul>
@@ -293,42 +295,56 @@ const moduleContent: { [key: string]: any } = {
       {
         slug: 'estrutura-projeto',
         title: '1. Estrutura Básica de um Projeto',
-        type: 'html',
-        content: `
-          <p class="text-gray-700 mb-3">Transformar uma ideia em projeto exige organização. Siga este roteiro prático:</p>
-          <dl class="space-y-4">
-            <div>
-              <dt class="font-semibold text-gray-800">Título:</dt>
-              <dd class="ml-4 text-gray-700">Curto, claro e direto. Ex: "Horta Comunitária Sustentável", "Oficina de Artesanato Quilombola".</dd>
-            </div>
-            <div>
-              <dt class="font-semibold text-gray-800">Apresentação/Justificativa:</dt>
-              <dd class="ml-4 text-gray-700">Explique: Qual problema da comunidade o projeto resolve? Por que é importante agora? Exemplo: "Nossa comunidade enfrenta dificuldade de acesso a alimentos frescos. A horta comunitária vai melhorar a alimentação e gerar renda."</dd>
-            </div>
-            <div>
-              <dt class="font-semibold text-gray-800">Objetivos:</dt>
-              <dd class="ml-4 text-gray-700">
-                <p>O que você quer alcançar?</p>
-                <ul class="list-disc list-inside ml-6 mt-1 space-y-1">
-                  <li><strong>Objetivo Geral:</strong> Ex: "Promover a segurança alimentar e gerar renda para 10 famílias."</li>
-                  <li><strong>Objetivos Específicos:</strong> Use verbos no infinitivo. Ex: "1. Preparar o terreno.", "2. Comprar sementes.", "3. Capacitar as famílias.", "4. Realizar a colheita."</li>
-                </ul>
-              </dd>
-            </div>
-            <div>
-              <dt class="font-semibold text-gray-800">Metodologia/Plano de Ação:</dt>
-              <dd class="ml-4 text-gray-700">Descreva o passo a passo para cada objetivo. Quem faz o quê? Quais recursos serão usados? Exemplo: "O grupo de jovens ficará responsável pelo plantio, com apoio técnico da EMATER."</dd>
-            </div>
-            <div>
-              <dt class="font-semibold text-gray-800">Cronograma:</dt>
-              <dd class="ml-4 text-gray-700">Quando cada atividade será feita? Monte uma tabela simples: Mês 1 - Preparar terreno; Mês 2 - Comprar insumos; Mês 3 - Plantio.</dd>
-            </div>
-            <div>
-              <dt class="font-semibold text-gray-800">Orçamento Simplificado:</dt>
-              <dd class="ml-4 text-gray-700">Liste tudo que precisa comprar ou contratar (materiais, serviços, transporte, alimentação). Pesquise preços. <span class="text-green-700">Dica: Use o modelo de planilha do Módulo 1.</span></dd>
-            </div>
-          </dl>
-          <p class="mt-4 text-blue-700 text-sm">Exemplo prático:<br/>
+        type: 'estrutura-projeto', // Alterado para novo tipo
+        introContent: `
+          <p class="text-gray-700 mb-3">Transformar uma ideia em projeto exige organização. Veja este diagrama que mostra as partes essenciais de um projeto:</p>
+        `,
+        steps: [
+          {
+            id: 'titulo',
+            title: 'Título',
+            description: 'Curto, claro e direto. Ex: "Horta Comunitária Sustentável", "Oficina de Artesanato Quilombola".',
+            tips: ['Use no máximo 10-15 palavras', 'Mencione o principal foco do projeto', 'Seja específico e evite termos muito técnicos'],
+            example: 'Oficina de Artesanato Quilombola para Jovens da Comunidade Terra Firme'
+          },
+          {
+            id: 'justificativa',
+            title: 'Justificativa',
+            description: 'Explique: Qual problema da comunidade o projeto resolve? Por que é importante agora?',
+            tips: ['Descreva a situação atual da comunidade', 'Explique por que o problema precisa ser resolvido', 'Conecte com políticas públicas existentes (ver Módulo 3)'],
+            example: 'Nossa comunidade enfrenta dificuldade de acesso a alimentos frescos. A horta comunitária vai melhorar a alimentação e gerar renda.'
+          },
+          {
+            id: 'objetivos',
+            title: 'Objetivos',
+            description: 'O que você quer alcançar? Divida em objetivo geral (amplo) e específicos (passos).',
+            tips: ['Use verbos no infinitivo (construir, capacitar, realizar)', 'Objetivos específicos devem ser mensuráveis', 'De 3 a 5 objetivos específicos é o ideal'],
+            example: '<strong>Objetivo Geral:</strong> Promover a segurança alimentar e gerar renda para 10 famílias.<br/><strong>Objetivos Específicos:</strong> 1. Preparar o terreno; 2. Comprar sementes; 3. Capacitar as famílias; 4. Realizar a colheita.'
+          },
+          {
+            id: 'metodologia',
+            title: 'Metodologia',
+            description: 'Descreva o passo a passo para cada objetivo. Quem faz o quê? Quais recursos serão usados?',
+            tips: ['Explique como cada objetivo será alcançado', 'Detalhe as atividades principais', 'Mencione quem será responsável por cada atividade'],
+            example: 'O grupo de jovens ficará responsável pelo plantio, com apoio técnico da EMATER. Serão realizadas oficinas mensais para capacitação em técnicas agroecológicas.'
+          },
+          {
+            id: 'cronograma',
+            title: 'Cronograma',
+            description: 'Quando cada atividade será feita? Monte uma tabela simples com meses/semanas e atividades.',
+            tips: ['Seja realista com os prazos', 'Considere atrasos e imprevistos', 'Lembre-se das estações do ano para atividades agrícolas'],
+            example: 'Mês 1: Preparar terreno; Mês 2: Comprar insumos; Mês 3: Plantio; Meses 4-6: Manutenção; Mês 7: Colheita.'
+          },
+          {
+            id: 'orcamento',
+            title: 'Orçamento',
+            description: 'Liste tudo que precisa comprar ou contratar (materiais, serviços, transporte, alimentação). Pesquise preços.',
+            tips: ['Pesquise pelo menos 3 orçamentos', 'Seja específico (quantidade, valor unitário, valor total)', 'Sempre inclua uma margem de segurança para imprevistos'],
+            example: 'Sementes: R$ 500,00; Ferramentas: R$ 800,00; Alimentação para oficinas: R$ 600,00; Transporte: R$ 400,00.'
+          }
+        ],
+        outroContent: `
+          <p class="mt-4 text-blue-700 text-sm">Exemplo prático completo:<br/>
             <strong>Título:</strong> Oficina de Artesanato Quilombola<br/>
             <strong>Justificativa:</strong> Valorizar a cultura local e gerar renda.<br/>
             <strong>Objetivo Geral:</strong> Capacitar 20 mulheres em técnicas de artesanato.<br/>
@@ -336,7 +352,7 @@ const moduleContent: { [key: string]: any } = {
             <strong>Cronograma:</strong> Março a junho.<br/>
             <strong>Orçamento:</strong> Materiais, transporte, alimentação.
           </p>
-        `,
+        `
       },
       {
         slug: 'templates-projeto',
@@ -412,23 +428,80 @@ const moduleContent: { [key: string]: any } = {
   },
   // --- Módulo 5: Ação e Apoio ---
   'acao-apoio': {
-    title: 'Módulo 5: Ação, Submissão, Acompanhamento e Rede de Apoio',
-    slug: 'acao-apoio', // Adiciona slug do módulo para chave de estado
+    title: 'Módulo 5: Ação e Apoio - Submissão e Acompanhamento',
     sections: [
       {
         slug: 'checklist-final',
         title: '1. Checklist Final de Submissão',
-        type: 'checklist',
+        type: 'checklist-visual', // Alterado para novo tipo
+        introContent: `
+          <p class="text-gray-700 mb-4">Antes de enviar seu projeto, faça uma última verificação. Este checklist ajudará você a não esquecer nada importante:</p>
+        `,
         items: [
-          { label: 'O projeto responde exatamente ao que o edital pede?' },
-          { label: 'Todos os documentos exigidos estão separados, corretos e atualizados?' },
-          { label: 'Os documentos estão no formato solicitado (PDF, DOC, ODT, etc.)?' },
-          { label: 'O formulário online (se houver) está totalmente preenchido?' },
-          { label: 'Fiz uma revisão final de ortografia, clareza e dados?' },
-          { label: 'Verifiquei a data e hora limite para o envio?' },
-          { label: 'Tenho o comprovante de envio (print, e-mail, AR dos Correios)?' },
-          { label: 'Pedi para alguém revisar tudo antes de enviar?' },
+          { 
+            id: 'docs', 
+            label: 'Todos os documentos estão completos e organizados?', 
+            tip: 'Verifique novamente se todos os documentos solicitados no edital estão prontos (certidões, declarações, ofícios, etc.)',
+            category: 'Documentação'
+          },
+          { 
+            id: 'formato', 
+            label: 'O formato de envio está correto? (PDF, Word, formulário online)', 
+            tip: 'Confirme no edital qual formato é aceito. Alguns editais só aceitam PDF, outros pedem Word ou formulários específicos.',
+            category: 'Documentação'
+          },
+          { 
+            id: 'assinaturas', 
+            label: 'Todos os documentos estão assinados por quem deve assinar?', 
+            tip: 'Verifique se as assinaturas necessárias estão presentes (do presidente da associação, do responsável pelo projeto, etc.)',
+            category: 'Documentação'
+          },
+          { 
+            id: 'prazo', 
+            label: 'Você ainda está dentro do prazo de submissão?', 
+            tip: 'Confira no edital a data e hora limite. Envie com antecedência para evitar problemas técnicos de última hora.',
+            category: 'Prazo'
+          },
+          { 
+            id: 'copia', 
+            label: 'Você guardou uma cópia de tudo que vai enviar?', 
+            tip: 'Mantenha sempre uma cópia completa de tudo que foi enviado, incluindo anexos e comprovantes de envio.',
+            category: 'Segurança'
+          },
+          { 
+            id: 'revisar', 
+            label: 'O projeto foi revisado por alguém além de você?', 
+            tip: 'Peça para alguém ler seu projeto antes de enviar para identificar erros ou pontos confusos.',
+            category: 'Qualidade'
+          },
+          { 
+            id: 'contato', 
+            label: 'Os dados de contato estão atualizados e corretos?', 
+            tip: 'Verifique se o email e telefone para contato estão corretos. É por eles que você receberá notificações!',
+            category: 'Comunicação'
+          },
+          { 
+            id: 'orcamento', 
+            label: 'O orçamento está dentro do limite do edital e bem detalhado?', 
+            tip: 'Confira se os valores estão dentro do permitido e se todos os itens estão bem detalhados (quantidade, valor unitário, valor total).',
+            category: 'Financeiro'
+          },
+          { 
+            id: 'objetivo', 
+            label: 'Os objetivos do projeto estão claros e alinhados com o edital?', 
+            tip: 'Releia a descrição do edital e certifique-se que seu projeto está alinhado com o que está sendo solicitado.',
+            category: 'Conteúdo'
+          },
+          { 
+            id: 'calendario', 
+            label: 'Você anotou as próximas datas importantes (resultado, recursos)?', 
+            tip: 'Anote todas as datas importantes: resultado preliminar, prazo para recursos, resultado final, prazo para envio de documentação complementar.',
+            category: 'Acompanhamento'
+          }
         ],
+        outroContent: `
+          <p class="mt-4 text-gray-700">Dica final: Fotografe ou tire print de cada etapa do envio. Se algo der errado, você terá como comprovar que tentou enviar dentro do prazo!</p>
+        `
       },
       {
         slug: 'como-enviar',
@@ -520,139 +593,425 @@ const moduleContent: { [key: string]: any } = {
           <p class="mt-4 text-green-700 text-sm">Dica: Mapeie quem são as pessoas e organizações que podem te ajudar em cada etapa e mantenha contato!</p>
         `,
       },
-      // Removida a seção 'links-uteis' duplicada do Módulo 5, pois os links relevantes já estão na seção 'Rede de Apoio' ou são genéricos.
     ],
   },
 };
 
 // --- Componente da Página ---
-// Adiciona 'use client' no topo para permitir hooks como useState
-
-const ModulePage = ({ params }: { params: { slug: string } }) => { // Removido ModulePageProps, tipo inferido/direto
-  const { slug } = params; // Removido await
-  const content = moduleContent[slug];
-
-  // Estado para os checklists interativos
-  // A chave será algo como 'decifrando-checklist-analise' ou 'acao-apoio-checklist-final'
-  const [checklistStates, setChecklistStates] = useState<{ [checklistSlug: string]: { [itemLabel: string]: boolean } }>({});
+const ModulePage = () => {
+  const { slug } = useParams();
+  const [checkedItems, setCheckedItems] = useState<{ [key: string]: { [key: string]: boolean } }>({});
+  const [expandedAnatomyItems, setExpandedAnatomyItems] = useState<{ [key: string]: boolean }>({});
+  const [expandedGlossaryTerms, setExpandedGlossaryTerms] = useState<{ [key: string]: boolean }>({});
+  const [selectedStep, setSelectedStep] = useState<string>('titulo');
+  const [activeChecklistTip, setActiveChecklistTip] = useState<string | null>(null);
 
   const handleChecklistChange = (checklistSlug: string, itemLabel: string, isChecked: boolean) => {
-    setChecklistStates(prevStates => ({
-      ...prevStates,
-      [checklistSlug]: {
-        ...(prevStates[checklistSlug] || {}),
-        [itemLabel]: isChecked,
-      },
+    setCheckedItems(prev => {
+      const sectionItems = prev[checklistSlug] || {};
+      return {
+        ...prev,
+        [checklistSlug]: {
+          ...sectionItems,
+          [itemLabel]: isChecked
+        }
+      };
+    });
+  };
+
+  const toggleAnatomyItem = (itemTitle: string) => {
+    setExpandedAnatomyItems(prev => ({
+      ...prev,
+      [itemTitle]: !prev[itemTitle]
     }));
   };
 
+  const toggleGlossaryTerm = (term: string) => {
+    setExpandedGlossaryTerms(prev => ({
+      ...prev,
+      [term]: !prev[term]
+    }));
+  };
 
-  if (!content) {
-    // Idealmente, redirecionar para uma página 404 ou mostrar mensagem
-    return <div className="p-6 text-center text-red-600">Conteúdo do módulo "{slug}" não encontrado.</div>;
+  // Calcular o progresso do checklist
+  const calculateProgress = (checklistKey: string, items: any[]) => {
+    if (!checkedItems[checklistKey]) return 0;
+    
+    const totalChecked = items.filter(item => 
+      checkedItems[checklistKey][item.label] === true
+    ).length;
+    
+    return (totalChecked / items.length) * 100;
+  };
+
+  // Se o slug é inválido ou não encontrado
+  if (!moduleContent[slug as string]) {
+    return (
+      <div className="p-6 text-center">
+        <h1 className="text-2xl font-bold text-red-500">Módulo não encontrado</h1>
+        <p className="mt-4">O módulo solicitado não existe ou está temporariamente indisponível.</p>
+        <a href="/" className="mt-6 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          Voltar para a página inicial
+        </a>
+      </div>
+    );
   }
 
-  // --- Estrutura JSX do Componente ---
+  const module = moduleContent[slug as string];
+
   return (
-    // Adiciona padding e um fundo branco/sombra para destacar a área de conteúdo
-    <div className="p-4 sm:p-6 bg-white shadow-md rounded-lg space-y-6"> {/* Adiciona space-y-6 aqui */}
-      {/* Título do Módulo */}
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800 border-b border-gray-200 pb-3">
-        {content.title}
-      </h1>
-      {/* Mapeia e renderiza cada seção do módulo */}
-      {content.sections.map((section: any) => {
-        // Lógica de renderização movida para dentro do map para facilitar condicionais
-        if (section.type === 'html') {
-          return (
-            <ContentCard key={section.slug} title={section.title}>
-              {/* Usar 'prose' do Tailwind para estilização básica de HTML */}
-              <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: section.content }} />
+    <div className="flex flex-col w-full max-w-4xl mx-auto p-4">
+      <h1 className="text-2xl md:text-3xl font-bold text-[var(--color-foreground)] mb-8">{module.title}</h1>
+
+      {module.sections.map((section: any, sectionIndex: number) => (
+        <div key={section.slug} className="mb-8 scroll-mt-20" id={section.slug}>
+          <h2 className="text-xl md:text-2xl font-semibold text-[var(--color-foreground)] mb-4">{section.title}</h2>
+
+          {/* HTML Content */}
+          {section.type === 'html' && (
+            <ContentCard>
+              <div dangerouslySetInnerHTML={{ __html: section.content }} />
             </ContentCard>
-          );
-        } else if (section.type === 'downloads') {
-          return (
-            <ContentCard key={section.slug} title={section.title}>
-               {/* Renderiza conteúdo HTML adicional se existir */}
-               {section.content && <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none text-gray-700 mb-3" dangerouslySetInnerHTML={{ __html: section.content }} />}
-               {/* Renderiza os botões de download */}
-               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                 {section.items.map((item: { fileName: string; label: string }) => (
-                   <DownloadButton
-                     key={item.fileName}
-                     // Garante que o caminho para o arquivo no diretório public está correto
-                     fileName={`templates/${item.fileName}`}
-                     label={item.label}
-                   />
-                 ))}
-               </div>
-            </ContentCard>
-          );
-        } else if (section.type === 'checklist') {
-          // Identificador único para o estado deste checklist específico
-          // Usa o slug definido no módulo (se existir) ou o slug da URL como prefixo
-          const modulePrefix = content.slug || slug;
-          const currentChecklistSlug = `${modulePrefix}-${section.slug}`; // Ex: 'decifrando-checklist-analise' ou 'acao-apoio-checklist-final'
-          const currentChecklistState = checklistStates[currentChecklistSlug] || {};
-          return (
-            <ContentCard key={section.slug} title={section.title}>
-              <ul className="list-none space-y-1 mt-2">
-                {section.items.map((item: { label: string }) => (
-                  <ChecklistItem
-                    key={item.label}
-                    label={item.label}
-                    // Usa o estado para determinar se está checado
-                    isChecked={!!currentChecklistState[item.label]}
-                    // Atualiza o estado quando o item muda - Adicionado tipo explícito boolean
-                    onChange={(isChecked: boolean) => handleChecklistChange(currentChecklistSlug, item.label, isChecked)}
-                  />
+          )}
+
+          {/* Downloads Section */}
+          {section.type === 'downloads' && (
+            <ContentCard>
+              <div dangerouslySetInnerHTML={{ __html: section.content }} />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                {section.items.map((item: any, index: number) => (
+                  <div key={index} className="flex justify-center">
+                    <DownloadButton fileName={item.fileName} label={item.label} />
+                  </div>
                 ))}
-              </ul>
-              {/* Renderizar section.content se existir */}
-              {section.content && <div className="mt-4 prose prose-sm sm:prose max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: section.content }} />}
+              </div>
             </ContentCard>
-          );
-        } else if (section.type === 'glossary') {
-          return (
-            <ContentCard key={section.slug} title={section.title}>
-              <dl className="space-y-3 mt-2">
-                {section.terms.map((termData: { term: string; definition: string }) => (
-                  <React.Fragment key={termData.term}>
-                    <dt className="font-semibold text-gray-800">{termData.term}:</dt>
-                    <dd className="ml-4 text-gray-700">{termData.definition}</dd>
-                  </React.Fragment>
-                ))}
-              </dl>
-              {/* Renderizar section.content se existir */}
-              {section.content && <div className="mt-4 prose prose-sm sm:prose max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: section.content }} />}
+          )}
+
+          {/* Checklist Section */}
+          {section.type === 'checklist' && (
+            <ContentCard>
+              <div className="space-y-3">
+                {section.items.map((item: any, index: number) => {
+                  const checklistKey = `${slug}-${section.slug}`;
+                  const isChecked = checkedItems[checklistKey]?.[item.label] || false;
+                  
+                  return (
+                    <ChecklistItem
+                      key={index}
+                      label={item.label}
+                      isChecked={isChecked}
+                      onChange={(checked) => handleChecklistChange(checklistKey, item.label, checked)}
+                    />
+                  );
+                })}
+              </div>
             </ContentCard>
-          );
-        } else if (section.type === 'anatomia') { // Novo tipo para Anatomia do Edital
-           return (
-             // Card principal: Não interativo (sempre aberto por padrão)
-             <ContentCard key={section.slug} title={section.title} isInteractive={false}>
-               {section.introContent && <div className="prose prose-sm sm:prose max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: section.introContent }} />}
-               <div className="space-y-3 mt-4"> {/* Espaçamento entre os cards internos */}
-                 {section.items.map((item: { title: string; content: string }) => (
-                   // Cards internos: Interativos (começam fechados por padrão)
-                   <ContentCard key={item.title} title={item.title} isInteractive={true}>
-                     <div className="prose prose-sm max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: item.content }} />
-                   </ContentCard>
-                 ))}
-               </div>
-               {section.outroContent && <div className="mt-4 prose prose-sm sm:prose max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: section.outroContent }} />}
-             </ContentCard>
-           );
-        } else if (section.content) { // Fallback para outros tipos com conteúdo
-          return (
-            <ContentCard key={section.slug} title={section.title}>
-              <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: section.content }} />
+          )}
+
+          {/* Anatomia de Edital - Visualização Interativa */}
+          {section.type === 'anatomia' && (
+            <ContentCard>
+              <div dangerouslySetInnerHTML={{ __html: section.introContent }} />
+              
+              <div className="mt-4 border border-[var(--color-border)] rounded-lg overflow-hidden bg-[var(--color-surface)] shadow-sm">
+                <div className="p-3 bg-[var(--color-primary)]/10 border-b border-[var(--color-border)] flex items-center">
+                  <FileText className="h-5 w-5 text-[var(--color-primary)] mr-2" />
+                  <h3 className="font-medium text-lg">Exemplo de Edital</h3>
+                </div>
+                
+                <div className="divide-y divide-[var(--color-border)]">
+                  {section.items.map((item: any, index: number) => {
+                    const isExpanded = expandedAnatomyItems[item.title] || false;
+                    
+                    return (
+                      <div key={index} className="bg-white">
+                        <button 
+                          onClick={() => toggleAnatomyItem(item.title)}
+                          className="w-full flex items-center justify-between p-3 text-left hover:bg-gray-50"
+                        >
+                          <div className="flex items-center">
+                            <span className="font-medium">{item.title}</span>
+                            {isExpanded ? 
+                              <ChevronUp className="h-4 w-4 ml-2 text-gray-500" /> : 
+                              <ChevronDown className="h-4 w-4 ml-2 text-gray-500" />
+                            }
+                          </div>
+                          <div className="bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs px-2 py-1 rounded-full">
+                            Clique para detalhes
+                          </div>
+                        </button>
+                        
+                        {isExpanded && (
+                          <div className="p-4 bg-gray-50">
+                            <div className="flex">
+                              <div className="w-1 bg-[var(--color-primary)] rounded-full mr-3"></div>
+                              <div className="flex-1">
+                                <div dangerouslySetInnerHTML={{ __html: item.content }} />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              
+              <div dangerouslySetInnerHTML={{ __html: section.outroContent }} className="mt-4" />
             </ContentCard>
-          );
-        }
-        // Retorna null se a seção não tiver um tipo conhecido ou conteúdo
-        return null;
-      })}
+          )}
+
+          {/* Glossário de Termos */}
+          {section.type === 'glossary' && (
+            <ContentCard>
+              <div className="flex items-center mb-4">
+                <BookOpen className="h-5 w-5 text-[var(--color-primary)] mr-2" />
+                <p className="text-gray-700">Clique nos termos para ver suas definições:</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {section.terms.map((glossaryItem: any, index: number) => {
+                  const isExpanded = expandedGlossaryTerms[glossaryItem.term] || false;
+                  
+                  return (
+                    <div 
+                      key={index} 
+                      className="border border-[var(--color-border)] rounded-lg overflow-hidden"
+                    >
+                      <button
+                        onClick={() => toggleGlossaryTerm(glossaryItem.term)}
+                        className="w-full flex items-center justify-between p-3 bg-[var(--color-surface)] text-left"
+                      >
+                        <span className="font-medium">{glossaryItem.term}</span>
+                        {isExpanded ? 
+                          <ChevronUp className="h-4 w-4 text-gray-500" /> : 
+                          <ChevronDown className="h-4 w-4 text-gray-500" />
+                        }
+                      </button>
+                      
+                      {isExpanded && (
+                        <div className="p-3 bg-white">
+                          <p className="text-gray-700">{glossaryItem.definition}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </ContentCard>
+          )}
+
+          {/* Estrutura de Projeto - Diagrama Visual Interativo */}
+          {section.type === 'estrutura-projeto' && (
+            <ContentCard>
+              <div dangerouslySetInnerHTML={{ __html: section.introContent }} />
+              
+              <div className="mt-6 border border-[var(--color-border)] rounded-lg overflow-hidden">
+                {/* Diagrama Visual */}
+                <div className="p-4 bg-[var(--color-surface)]">
+                  <div className="flex flex-wrap justify-center gap-2 md:gap-4">
+                    {section.steps.map((step: any) => (
+                      <button
+                        key={step.id}
+                        onClick={() => setSelectedStep(step.id)}
+                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                          selectedStep === step.id
+                            ? 'bg-[var(--color-primary)] text-white shadow-md scale-105'
+                            : 'bg-white text-[var(--color-text)] border border-[var(--color-border)] hover:bg-[var(--color-primary)]/10'
+                        }`}
+                      >
+                        {step.title}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  {/* Linhas de conexão - SVG estilizado */}
+                  <div className="relative flex justify-center my-4">
+                    <svg className="w-full max-w-lg h-8" viewBox="0 0 400 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 10 H390" stroke="var(--color-primary)" strokeWidth="2" strokeDasharray="4 4" />
+                      <circle cx="200" cy="10" r="4" fill="var(--color-primary)" />
+                    </svg>
+                  </div>
+                  
+                  {/* Detalhes do passo selecionado */}
+                  {section.steps.map((step: any) => (
+                    selectedStep === step.id && (
+                      <div key={step.id} className="bg-white p-4 rounded-lg border border-[var(--color-border)] transition-all animate-fadeIn">
+                        <h3 className="text-lg font-semibold text-[var(--color-primary)]">{step.title}</h3>
+                        <p className="mt-2 text-[var(--color-text)]">{step.description}</p>
+                        
+                        <div className="mt-4 bg-[var(--color-surface)] p-3 rounded-md">
+                          <h4 className="font-medium text-[var(--color-foreground)]">Dicas:</h4>
+                          <ul className="mt-1 space-y-1 list-disc list-inside text-sm text-[var(--color-text-light)]">
+                            {step.tips.map((tip: string, i: number) => (
+                              <li key={i}>{tip}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div className="mt-4 border-t border-[var(--color-border)] pt-3">
+                          <h4 className="font-medium text-[var(--color-foreground)]">Exemplo:</h4>
+                          <div className="mt-1 text-sm italic text-[var(--color-text-light)]" dangerouslySetInnerHTML={{ __html: step.example }} />
+                        </div>
+                      </div>
+                    )
+                  ))}
+                  
+                  {/* Navegação entre passos */}
+                  <div className="flex justify-between mt-4">
+                    <button
+                      onClick={() => {
+                        const currentIndex = section.steps.findIndex((s: any) => s.id === selectedStep);
+                        const prevIndex = (currentIndex - 1 + section.steps.length) % section.steps.length;
+                        setSelectedStep(section.steps[prevIndex].id);
+                      }}
+                      className="px-2 py-1 text-sm text-[var(--color-primary)] hover:underline flex items-center"
+                    >
+                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                      </svg>
+                      Anterior
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        const currentIndex = section.steps.findIndex((s: any) => s.id === selectedStep);
+                        const nextIndex = (currentIndex + 1) % section.steps.length;
+                        setSelectedStep(section.steps[nextIndex].id);
+                      }}
+                      className="px-2 py-1 text-sm text-[var(--color-primary)] hover:underline flex items-center"
+                    >
+                      Próximo
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div dangerouslySetInnerHTML={{ __html: section.outroContent }} className="mt-4" />
+            </ContentCard>
+          )}
+
+          {/* Checklist com Progresso Visual */}
+          {section.type === 'checklist-visual' && (
+            <ContentCard>
+              <div dangerouslySetInnerHTML={{ __html: section.introContent }} />
+              
+              {/* Barra de Progresso */}
+              <div className="mt-4 mb-6">
+                <div className="flex justify-between text-sm text-[var(--color-text-light)] mb-1">
+                  <span>Progresso:</span>
+                  {(() => {
+                    const checklistKey = `${slug}-${section.slug}`;
+                    const progress = calculateProgress(checklistKey, section.items);
+                    return <span>{Math.round(progress)}% completo</span>;
+                  })()}
+                </div>
+                <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-[var(--color-primary)] transition-all duration-500 ease-out"
+                    style={{ 
+                      width: `${calculateProgress(`${slug}-${section.slug}`, section.items)}%` 
+                    }}
+                  ></div>
+                </div>
+              </div>
+              
+              {/* Itens Agrupados por Categoria */}
+              <div className="space-y-6">
+                {(() => {
+                  // Agrupar itens por categoria
+                  const categories: { [key: string]: any[] } = {};
+                  section.items.forEach((item: any) => {
+                    if (!categories[item.category]) {
+                      categories[item.category] = [];
+                    }
+                    categories[item.category].push(item);
+                  });
+                  
+                  return Object.entries(categories).map(([category, items]) => (
+                    <div key={category} className="border border-[var(--color-border)] rounded-lg overflow-hidden">
+                      <div className="bg-[var(--color-surface)] p-3 border-b border-[var(--color-border)]">
+                        <h3 className="font-medium text-[var(--color-foreground)]">{category}</h3>
+                      </div>
+                      <div className="p-4 bg-white space-y-3">
+                        {items.map((item: any) => {
+                          const checklistKey = `${slug}-${section.slug}`;
+                          const isChecked = checkedItems[checklistKey]?.[item.label] || false;
+                          
+                          return (
+                            <div key={item.id} className="relative">
+                              <div className="flex items-start space-x-2">
+                                <div className="flex-shrink-0 pt-0.5">
+                                  <ChecklistItem
+                                    label=""
+                                    isChecked={isChecked}
+                                    onChange={(checked) => handleChecklistChange(checklistKey, item.label, checked)}
+                                  />
+                                </div>
+                                <div className="flex-grow">
+                                  <label 
+                                    className={`text-sm cursor-pointer ${isChecked ? 'text-[var(--color-text-light)] line-through' : 'text-[var(--color-text)]'}`}
+                                    onClick={() => handleChecklistChange(checklistKey, item.label, !isChecked)}
+                                  >
+                                    {item.label}
+                                  </label>
+                                  
+                                  <button
+                                    type="button"
+                                    className="ml-1 text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors"
+                                    onClick={() => setActiveChecklistTip(activeChecklistTip === item.id ? null : item.id)}
+                                    aria-label="Ver dica"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clipRule="evenodd" />
+                                    </svg>
+                                  </button>
+                                  
+                                  {activeChecklistTip === item.id && (
+                                    <div className="mt-2 p-2 bg-[var(--color-primary)]/5 border border-[var(--color-primary)]/20 rounded text-xs text-[var(--color-text)] animate-fadeIn">
+                                      {item.tip}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ));
+                })()}
+              </div>
+              
+              <div dangerouslySetInnerHTML={{ __html: section.outroContent }} className="mt-6" />
+            </ContentCard>
+          )}
+
+          {/* Next Section Link (except for last section) */}
+          {sectionIndex < module.sections.length - 1 && (
+            <div className="mt-6">
+              <a
+                href={`#${module.sections[sectionIndex + 1].slug}`}
+                className="inline-flex items-center text-[var(--color-primary)] hover:underline"
+              >
+                Próxima seção: {module.sections[sectionIndex + 1].title}
+                <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          )}
+        </div>
+      ))}
+
+      {/* Navegação entre módulos */}
+      <div className="mt-12 flex flex-col sm:flex-row justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+        {/* Links para navegação entre módulos aqui */}
+      </div>
     </div>
   );
 };
