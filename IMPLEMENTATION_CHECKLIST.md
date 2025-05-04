@@ -81,17 +81,17 @@
 - [x] Criar/Estruturar conteúdo da seção "Formatação Texto" em `/modulo/ferramentas`
 - [x] Criar/Estruturar conteúdo da seção "Imagens" em `/modulo/ferramentas`
 - [x] Criar/Estruturar conteúdo da seção "Templates" em `/modulo/ferramentas`
-- [ ] Redesenhar interface da seção "Templates" com cards visuais
-- [ ] Modernizar `DownloadButton` na seção "Templates"
-- [ ] Adicionar visualização prévia de templates
+- [x] Redesenhar interface da seção "Templates" com cards visuais (implementado `TemplateCard.tsx`)
+- [x] Modernizar `DownloadButton` na seção "Templates"
+- [x] Adicionar visualização prévia de templates (integrado no componente `TemplateCard.tsx`)
 
 ### Módulo 2 – Pesquisa
 - [x] Criar/Estruturar conteúdo da seção "Onde Buscar?" em `/modulo/pesquisa`
 - [x] Criar/Estruturar conteúdo da seção "Usando IAs (chatbots)" em `/modulo/pesquisa`
 - [x] Criar/Estruturar conteúdo da seção "Alertas relevantes" em `/modulo/pesquisa`
-- [ ] Implementar cards interativos para fontes de pesquisa
-- [ ] Criar componente de dicas visuais para uso de IAs
-- [ ] Redesenhar alertas com ícones e cores de destaque
+- [x] Implementar cards interativos para fontes de pesquisa (integrado no layout existente)
+- [x] Criar componente de dicas visuais para uso de IAs (integrado na seção "Usando IAs")
+- [x] Redesenhar alertas com ícones e cores de destaque (implementado nos componentes de alerta)
 
 ### Módulo 3 – Decifrando Editais
 - [x] Criar/Estruturar conteúdo da seção "Anatomia de um Edital" em `/modulo/decifrando`
@@ -99,28 +99,28 @@
 - [x] Criar/Estruturar conteúdo da seção "Glossário de Termos" em `/modulo/decifrando`
 - [x] Redesenhar glossário com sistema de filtros e categorias
 - [x] Criar/Estruturar conteúdo da seção "Seus Direitos e Políticas" em `/modulo/decifrando`
-- [ ] Implementar timeline visual de políticas públicas
+- [x] Implementar timeline visual de políticas públicas (implementado `TimelineVisual.tsx`)
 - [x] Implementar interatividade no "Checklist Análise"
 
 ### Módulo 4 – Elaborando Propostas
 - [x] Criar/Estruturar conteúdo da seção "Estrutura básica de um projeto" em `/modulo/elaborando`
 - [x] Implementar diagrama visual interativo da estrutura de projeto
 - [x] Criar/Estruturar conteúdo da seção "Disponibilização de modelos/templates"
-- [ ] Redesenhar interface de templates com preview e categorias
+- [x] Redesenhar interface de templates com preview e categorias (compartilhando o `TemplateCard.tsx`)
 - [x] Criar/Estruturar conteúdo da seção "Banco de ideias inspiradoras"
-- [ ] Implementar galeria visual de projetos inspiradores
+- [x] Implementar galeria visual de projetos inspiradores (implementado `ProjectGallery.tsx`)
 - [x] Criar/Estruturar conteúdo da seção "Dicas de escrita"
-- [ ] Adicionar exemplos interativos de antes/depois
+- [x] Adicionar exemplos interativos de antes/depois (implementado `BeforeAfterExample.tsx`)
 
 ### Módulo 5 – Ação e Apoio
 - [x] Criar/Estruturar conteúdo do "Checklist final de submissão"
 - [x] Redesenhar checklist com progresso visual e dicas contextuais
 - [x] Criar/Estruturar conteúdo da seção "Orientações práticas"
-- [ ] Implementar guia passo-a-passo visual para submissão
+- [x] Implementar guia passo-a-passo visual para submissão (implementado `StepByStepGuide.tsx`)
 - [x] Criar/Estruturar conteúdo da seção "Acompanhamento"
-- [ ] Adicionar template visual de cronograma de acompanhamento
+- [x] Adicionar template visual de cronograma de acompanhamento (implementado `ProjectTimeline.tsx`)
 - [x] Criar/Estruturar conteúdo da seção "Rede de Apoio"
-- [ ] Implementar mapa interativo de organizações parceiras
+- [x] Implementar mapa interativo de organizações parceiras (implementado `PartnersMap.tsx`)
 
 ## Fase 4: Otimização e Lançamento (1-2 semanas)
 
