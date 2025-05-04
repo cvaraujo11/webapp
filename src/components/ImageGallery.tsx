@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import ProgressiveImage from './ui/ProgressiveImage';
+import { getLowQualityImageUrl } from '../lib/image-utils';
 
 interface ImageItem {
   src: string;
@@ -11,6 +12,7 @@ interface ImageItem {
   caption?: string;
   width?: number;
   height?: number;
+  blurDataURL?: string;
 }
 
 interface ImageGalleryProps {
@@ -86,12 +88,15 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
               className="relative aspect-video bg-muted overflow-hidden rounded-lg cursor-pointer"
               onClick={() => enableZoom && setSelectedImage(index)}
             >
-              <Image
+              <ProgressiveImage
                 src={image.src}
                 alt={image.alt}
+                lowQualitySrc={getLowQualityImageUrl(image.src)}
+                blurDataURL={image.blurDataURL}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
+                priority={index < 4} // Priorizar as primeiras 4 imagens
               />
               
               {/* Overlay de hover */}
@@ -140,12 +145,15 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
                 transition={{ duration: 0.3 }}
               >
                 <div className="relative w-full h-full">
-                  <Image
+                  <ProgressiveImage
                     src={images[selectedImage].src}
                     alt={images[selectedImage].alt}
+                    lowQualitySrc={getLowQualityImageUrl(images[selectedImage].src, 40)}
+                    blurDataURL={images[selectedImage].blurDataURL}
                     fill
                     sizes="100vw"
                     className="object-contain"
+                    priority={true} // Priorizar a imagem em tela cheia
                   />
                 </div>
               </motion.div>
@@ -154,6 +162,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
               <button
                 className="absolute top-4 right-4 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
                 onClick={() => setSelectedImage(null)}
+                aria-label="Fechar visualização"
               >
                 <X size={24} />
               </button>
@@ -162,6 +171,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
               <button
                 className="absolute top-4 left-4 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
                 onClick={() => setShowInfo(!showInfo)}
+                aria-label={showInfo ? "Ocultar informações" : "Mostrar informações"}
               >
                 <Info size={24} />
               </button>
@@ -175,6 +185,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
                       e.stopPropagation();
                       prevImage();
                     }}
+                    aria-label="Imagem anterior"
                   >
                     <ChevronLeft size={24} />
                   </button>
@@ -185,6 +196,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
                       e.stopPropagation();
                       nextImage();
                     }}
+                    aria-label="Próxima imagem"
                   >
                     <ChevronRight size={24} />
                   </button>

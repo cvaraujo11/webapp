@@ -4,6 +4,7 @@ import { Menu, HelpCircle, User, Search, BookOpen, Settings, LogOut } from 'luci
 import SearchCommand from './SearchCommand';
 import ProgressIndicator from './ProgressIndicator';
 import Logo from './Logo';
+import AccessibilityMenu from './ui/AccessibilityMenu';
 import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
@@ -31,12 +32,17 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, currentSectionTitle, isS
   const sectionTitle = currentSectionTitle || 'Início';
   
   return (
-    <header className="bg-primary text-white h-[64px] px-4 flex justify-between items-center shadow-md sticky top-0 z-50">
+    <header 
+      className="bg-primary text-white h-[64px] px-4 flex justify-between items-center shadow-md sticky top-0 z-50"
+      role="banner"
+    >
       <div className="flex items-center space-x-4">
         <button
           className="p-1.5 rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-white transition-colors"
           onClick={toggleSidebar}
-          aria-label="Toggle Sidebar"
+          aria-label={isSidebarOpen ? "Fechar menu lateral" : "Abrir menu lateral"}
+          aria-expanded={isSidebarOpen}
+          aria-controls="sidebar"
         >
           <Menu size={20} />
         </button>
@@ -62,6 +68,14 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, currentSectionTitle, isS
           <div 
             onClick={() => setSearchOpen(true)}
             className="flex items-center bg-primary-dark/30 rounded-md px-3 py-1.5 text-sm text-white/90 cursor-pointer hover:bg-primary-dark/50 transition-colors w-[180px]"
+            role="button"
+            tabIndex={0}
+            aria-label="Abrir busca"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                setSearchOpen(true);
+              }
+            }}
           >
             <Search size={16} className="mr-2 text-white/70" />
             <span>Buscar...</span>
@@ -80,10 +94,13 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, currentSectionTitle, isS
         {/* Diálogo de busca */}
         <SearchCommand open={searchOpen} setOpen={setSearchOpen} />
 
+        {/* Menu de acessibilidade */}
+        <AccessibilityMenu />
+
         {/* Botão de ajuda */}
         <button
           className="p-1.5 rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-white transition-colors"
-          aria-label="Ajuda"
+          aria-label="Abrir ajuda"
         >
           <HelpCircle size={20} />
         </button>
@@ -93,7 +110,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, currentSectionTitle, isS
           <DropdownMenuTrigger asChild>
             <button
               className="p-1.5 rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-white transition-colors"
-              aria-label="Perfil do Usuário"
+              aria-label="Abrir menu de perfil"
             >
               <User size={20} />
             </button>

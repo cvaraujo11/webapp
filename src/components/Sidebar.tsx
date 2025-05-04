@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import SidebarItem from './SidebarItem';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -24,10 +24,12 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet'; 
+import { NavigationDirection, useKeyboardNavigation } from '@/lib/hooks/useKeyboardNavigation';
 
 interface SidebarProps {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void; 
+  setIsOpen: (isOpen: boolean) => void;
+  id?: string;
 }
 
 interface SubItem {
@@ -117,6 +119,15 @@ const modules: Module[] = [
 const SidebarContent = () => {
   const pathname = usePathname();
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({});
+  const navRef = useRef<HTMLElement>(null);
+  
+  // Configurar navegação por teclado
+  const { focusedIndex, focusItem } = useKeyboardNavigation({
+    containerRef: navRef,
+    itemSelector: 'a[role="menuitem"], button[aria-label*="módulo"]',
+    direction: NavigationDirection.VERTICAL,
+    loop: true,
+  });
 
   // Função para alternar a expansão de um módulo
   const toggleModule = (slug: string) => {
@@ -144,8 +155,13 @@ const SidebarContent = () => {
   }, [pathname]);
 
   return (
-    <nav className="flex flex-col h-full">
-      <ul className="space-y-1 px-2">
+    <nav 
+      ref={navRef} 
+      className="flex flex-col h-full"
+      role="navigation" 
+      aria-label="Menu de navegação principal"
+    >
+      <ul className="space-y-1 px-2" role="menu">
         {modules.map((module) => {
           // Verificar se o módulo atual está ativo com base no pathname
           const isActive = pathname.includes(`/modulo/${module.slug}`);
@@ -154,36 +170,41 @@ const SidebarContent = () => {
           const shouldShowSubItems = isActive || expandedModules[module.slug];
           
           return (
-            <li key={module.slug} className="px-2">
+            <li key={module.slug} className="px-2" role="none">
               <div className="flex flex-col">
                 <div className="flex items-center justify-between">
                   {/* Botão de expandir/colapsar */}
                   <button
                     onClick={() => toggleModule(module.slug)}
-                    className="w-5 h-5 flex items-center justify-center rounded-sm hover:bg-accent"
-                    aria-label={shouldShowSubItems ? "Colapsar módulo" : "Expandir módulo"}
+                    className="w-5 h-5 flex items-center justify-center rounded-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    aria-label={shouldShowSubItems ? `Colapsar módulo ${module.name}` : `Expandir módulo ${module.name}`}
+                    aria-expanded={shouldShowSubItems}
+                    aria-controls={`${module.slug}-subitems`}
                   >
                     <ChevronRight 
                       className={cn(
                         "h-4 w-4 text-muted-foreground transition-transform",
                         shouldShowSubItems && "rotate-90"
                       )} 
+                      aria-hidden="true"
                     />
                   </button>
                   
-                  {/* Item principal do módulo - sem envolver em li */}
+                  {/* Item principal do módulo */}
                   <div className="flex-1">
                     <Link
                       href={`/modulo/${module.slug}`}
                       className={cn(
-                        "flex items-center px-3 py-1.5 rounded-md transition-colors text-sm group",
+                        "flex items-center px-3 py-1.5 rounded-md transition-colors text-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
                         isActive
                           ? "bg-primary text-primary-foreground font-medium"
                           : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                       )}
+                      role="menuitem"
+                      aria-current={isActive ? "page" : undefined}
                     >
                       {module.icon && (
-                        <module.icon className="mr-2 h-4 w-4" />
+                        <module.icon className="mr-2 h-4 w-4" aria-hidden="true" />
                       )}
                       <span className="truncate">{module.name}</span>
                     </Link>
@@ -192,8 +213,18 @@ const SidebarContent = () => {
                 
                 {/* Barra de progresso */}
                 {module.progress !== undefined && (
-                  <div className="ml-8 mt-1 mb-1 w-[80%]">
-                    <div className="h-1 bg-muted rounded-full overflow-hidden">
+                  <div 
+                    className="ml-8 mt-1 mb-1 w-[80%]"
+                    aria-hidden={module.progress === 0}
+                  >
+                    <div 
+                      className="h-1 bg-muted rounded-full overflow-hidden"
+                      role="progressbar"
+                      aria-valuenow={module.progress}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={`Progresso do módulo ${module.name}: ${module.progress}%`}
+                    >
                       <div 
                         className={cn(
                           "h-full rounded-full",
@@ -205,25 +236,35 @@ const SidebarContent = () => {
                   </div>
                 )}
                 
-                {/* Subitens do módulo */}
-                {shouldShowSubItems && (
-                  <ul className="ml-8 mt-1 border-l border-muted pl-2 space-y-1">
-                    {module.subItems.map((subItem) => (
-                      <li key={subItem.slug}>
-                        <Link
-                          href={`/modulo/${module.slug}/${subItem.slug}`}
-                          className={cn(
-                            "flex items-center px-3 py-1.5 rounded-md transition-colors text-sm group",
-                            "pl-7", // Padding extra para subitens
-                            pathname === `/modulo/${module.slug}/${subItem.slug}` || pathname.startsWith(`/modulo/${module.slug}/${subItem.slug}/`)
-                              ? "bg-primary text-primary-foreground font-medium"
-                              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                          )}
-                        >
-                          <span className="truncate">{subItem.name}</span>
-                        </Link>
-                      </li>
-                    ))}
+                {/* Lista de subItems */}
+                {shouldShowSubItems && module.subItems.length > 0 && (
+                  <ul 
+                    id={`${module.slug}-subitems`}
+                    className="ml-6 mt-1 space-y-1"
+                    role="menu"
+                    aria-label={`Subtópicos de ${module.name}`}
+                  >
+                    {module.subItems.map((subItem) => {
+                      const isSubItemActive = pathname.includes(`/modulo/${module.slug}/${subItem.slug}`);
+                      
+                      return (
+                        <li key={`${module.slug}-${subItem.slug}`} role="none">
+                          <Link
+                            href={`/modulo/${module.slug}/${subItem.slug}`}
+                            className={cn(
+                              "block px-2 py-1 text-sm rounded-sm transition-colors",
+                              isSubItemActive
+                                ? "text-primary font-medium bg-accent/50"
+                                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                            )}
+                            role="menuitem"
+                            aria-current={isSubItemActive ? "page" : undefined}
+                          >
+                            {subItem.name}
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </div>
@@ -235,34 +276,56 @@ const SidebarContent = () => {
   );
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, id }) => {
+  // Detectar se estamos num dispositivo móvel
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Verificar na montagem e adicionar listener para redimensionamento
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
+  
   return (
     <>
-      {/* Sidebar para desktop - aparece apenas quando ativado */}
-      <aside 
-        className={`md:block w-64 border-r border-border bg-background fixed top-16 bottom-0 left-0 z-30 overflow-y-auto transition-transform duration-300 shadow-lg ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
-      >
-        <div className="py-2">
-          <SidebarContent />
-        </div>
-      </aside>
-
-      {/* Sidebar para mobile - usa o componente Sheet */}
-      <div className="md:hidden">
+      {/* Versão Mobile: Sheet da sidebar como overlay */}
+      {isMobile ? (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent side="left" className="w-64 p-0 bg-background top-16">
-            <SheetHeader className="sr-only">
-              <SheetTitle>Menu Principal</SheetTitle>
-              <SheetDescription>
-                Navegação principal do site
-              </SheetDescription>
+          <SheetContent 
+            side="left" 
+            className="p-0 w-[270px]"
+            id={id}
+          >
+            <SheetHeader className="p-4 border-b">
+              <SheetTitle>Menu de Navegação</SheetTitle>
             </SheetHeader>
-            <div className="overflow-y-auto h-full">
+            <div className="pt-2 pb-12 overflow-y-auto h-[calc(100vh-60px)]">
               <SidebarContent />
             </div>
           </SheetContent>
         </Sheet>
-      </div>
+      ) : (
+        /* Versão Desktop: Sidebar fixa com toggle */
+        <aside 
+          className={cn(
+            "fixed top-[64px] left-0 h-[calc(100vh-64px)] overflow-hidden transition-all duration-300 bg-card border-r",
+            isOpen ? "w-64" : "w-0"
+          )}
+          aria-hidden={!isOpen}
+          id={id}
+        >
+          <div className="w-64 h-full overflow-y-auto pt-2 pb-12">
+            <SidebarContent />
+          </div>
+        </aside>
+      )}
     </>
   );
 };

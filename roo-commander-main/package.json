@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@iarna/toml": "^2.2.5",
+    "js-yaml": "^4.1.0"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "yargs": "^17.7.2"
+  }
+}
